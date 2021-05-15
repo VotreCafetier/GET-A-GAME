@@ -1,21 +1,15 @@
 import random
 import discord
+import json
 
 
 api_token = "NDY5NTkwODM4NjM3NDk0Mjc0.W1DqjA.oyh7oyUOQxWeAHAB3lNkJe9_eLo"
 
-games_list = [
-"Battlefield 4",
-"Dead By Daylight",
-"Starcraft 2",
-"Minecraft",
-"Tom Clancy's Rainbow Six Siege",
-"Halo: The Master Chief Collection",
-"Totally Accurate Battlegrounds",
-"Osu!",
-"Overwatch",
-"Escape From Tarkov"
-]
+with open('games.json') as f:
+  data_json = json.load(f)
+
+
+games_list = data_json
 
 client = discord.Client()
 
