@@ -5,9 +5,12 @@ import json
 token = "NDY5NTkwODM4NjM3NDk0Mjc0.W1DqjA.oyh7oyUOQxWeAHAB3lNkJe9_eLo"
 client = discord.Client()
 
-# Open games from json
-with open('games.json') as f:
-    games_list = json.load(f)
+
+def RefreshGames():
+    # Open games from json
+    with open('games.json') as f:
+        games_list = json.load(f)
+        return games_list
 
 
 @client.event
@@ -23,11 +26,22 @@ async def on_message(message):
 
     # Generate a random games
     if message.content.startswith('$Get'):
-        await message.channel.send(random.choice(games_list))
+        try:
+            rnd_game = random.choice(RefreshGames())
+            print("Generated a "+rnd_game)
+            await message.channel.send(rnd_game)
+        except Exception as e:
+            print(e)
+            await message.channel.send("There is no game to choose from")
 
-    # List all of the array
+    # List all of the games
     if message.content.startswith('$List'):
-        await message.channel.send('\n'.join(str(x) for x in games_list))
+        try:
+            print("Printed List")
+            await message.channel.send('\n'.join(str(x) for x in RefreshGames()))
+        except Exception as e:
+            print(e)
+            await message.channel.send("There is no game to choose from")
 
     # Add an element to the game array
     if message.content.startswith('$Add'):
@@ -38,14 +52,21 @@ async def on_message(message):
             file.seek(0)
             json.dump(data, file)
 
+        RefreshGames()
         print("Added : "+msg_list)
-        # games.list.append(message)
         await message.channel.send("Added : "+msg_list)
 
     # reset array
     if message.content.startswith('$Reset'):
+        with open("games.json", "w") as file:
+            data = []
+            json.dump(data, file)
+
+        RefreshGames()
         print("Resetted games")
         await message.channel.send("Resetted games")
+
+    # Delete a game
 
 try:
     client.run(token)
