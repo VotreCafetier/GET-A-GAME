@@ -14,6 +14,7 @@ with open('games.json') as f:
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
+
 @client.event
 async def on_message(message):
     # Prevent the bot to reply to itself
@@ -21,32 +22,31 @@ async def on_message(message):
         return
 
     # Generate a random games
-    if message.content.startswith('$Gen'):
+    if message.content.startswith('$Get'):
         await message.channel.send(random.choice(games_list))
 
     # List all of the array
     if message.content.startswith('$List'):
         for games in games_list:
-            await message.channel.send(games, end = "\n")
+            await message.channel.send(games)
 
     # Add an element to the game array
     if message.content.startswith('$Add'):
         msg_list = str(message.content)[5:]
-        #RENDU ICI
         with open("games.json", "r+") as file:
             data = json.load(file)
-            data.update(msg_list)
+            data.append(msg_list)
             file.seek(0)
             json.dump(data, file)
-
-
-        games_list.append(msg_list)
 
         print("Added : "+msg_list)
         # games.list.append(message)
         await message.channel.send("Added : "+msg_list)
 
     #reset array
+    if message.content.startswith('$Reset'):
+        print("Resetted games")
+        await message.channel.send("Resetted games")
 
 try:
     client.run(token)
