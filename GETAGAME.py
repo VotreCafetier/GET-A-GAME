@@ -7,7 +7,8 @@ client = discord.Client()
 
 # Open games from json
 with open('games.json') as f:
-  games_list = json.load(f)
+    games_list = json.load(f)
+
 
 @client.event
 async def on_ready():
@@ -38,7 +39,7 @@ async def on_message(message):
             file.seek(0)
             json.dump(data, file)
 
-        
+
         games_list.append(msg_list)
 
         print("Added : "+msg_list)
@@ -47,5 +48,7 @@ async def on_message(message):
 
     #reset array
 
-
-client.run(token)
+try:
+    client.run(token)
+except Exception as e:
+    print(e)
