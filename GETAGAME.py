@@ -27,8 +27,7 @@ async def on_message(message):
 
     # List all of the array
     if message.content.startswith('$List'):
-        for games in games_list:
-            await message.channel.send(games)
+        await message.channel.send('\n'.join(str(x) for x in games_list))
 
     # Add an element to the game array
     if message.content.startswith('$Add'):
@@ -43,7 +42,7 @@ async def on_message(message):
         # games.list.append(message)
         await message.channel.send("Added : "+msg_list)
 
-    #reset array
+    # reset array
     if message.content.startswith('$Reset'):
         print("Resetted games")
         await message.channel.send("Resetted games")
