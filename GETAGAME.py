@@ -22,6 +22,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    msg_author = str(message.author)+" "
     # Prevent the bot to reply to itself
     if message.author == client.user:
         return
@@ -30,7 +31,7 @@ async def on_message(message):
     if message.content.startswith('$Get'):
         try:
             rnd_game = random.choice(RefreshGames())
-            print(now+"Generated a "+rnd_game)
+            print(now+msg_author+"Generated a random game : "+rnd_game)
             await message.channel.send(rnd_game)
         except Exception as e:
             print(e)
@@ -39,7 +40,7 @@ async def on_message(message):
     # List all of the games
     if message.content.startswith('$List'):
         try:
-            print(now+"Printed List")
+            print(now+msg_author+"Listed all the games")
             await message.channel.send('\n'.join(str(x) for x in RefreshGames()))
         except Exception as e:
             print(e)
@@ -54,7 +55,7 @@ async def on_message(message):
             file.seek(0)
             json.dump(data, file)
 
-        print(now+"Added : "+msg_list)
+        print(now+msg_author+"Added : "+msg_list)
         await message.channel.send("Added : "+msg_list)
 
     # delete game
@@ -73,15 +74,15 @@ async def on_message(message):
             print(e)
             await message.channel.send("There is no game called "+msg_list)
         else:
-            print(now+"Deleted "+msg_list)
-            await message.channel.send("Deleted "+msg_list)
+            print(now+msg_author+"Deleted : "+msg_list)
+            await message.channel.send("Deleted : "+msg_list)
 
     # reset all games
     if message.content.startswith('$Reset'):
         with open("games.json", "w") as file:
             data = []
             json.dump(data, file)
-        print(now+"Resetted games")
+        print(now+msg_author+"Resetted all games")
         await message.channel.send("Resetted games")
 
 try:
