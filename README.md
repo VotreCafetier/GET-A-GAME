@@ -4,11 +4,13 @@ USING
 - Discord
 
 TODO
-- Show list while in same message (enter)
-- Add to List
 - Remove From List
 - Help which show all the command
-
+- If space or , the delete or add multiple
+- Add nothing if nothing
+- Create a log (which delete if too heavy)
+- Indent for games.json
+- show the author of the message when there is an action
 
 Games
 Battlefield 4

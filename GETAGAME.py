@@ -1,9 +1,11 @@
 import random
 import discord
 import json
+import datetime
 
 token = "NDY5NTkwODM4NjM3NDk0Mjc0.W1DqjA.oyh7oyUOQxWeAHAB3lNkJe9_eLo"
 client = discord.Client()
+now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
 
 
 def RefreshGames():
@@ -15,7 +17,7 @@ def RefreshGames():
 
 @client.event
 async def on_ready():
-    print('We have logged in as {0.user}'.format(client))
+    print(now+'We have logged in as {0.user}'.format(client))
 
 
 @client.event
@@ -28,16 +30,16 @@ async def on_message(message):
     if message.content.startswith('$Get'):
         try:
             rnd_game = random.choice(RefreshGames())
-            print("Generated a "+rnd_game)
+            print(now+"Generated a "+rnd_game)
             await message.channel.send(rnd_game)
         except Exception as e:
             print(e)
-            await message.channel.send("There is no game to choose from")
+            await message.channel.send(now+"There is no game to choose from")
 
     # List all of the games
     if message.content.startswith('$List'):
         try:
-            print("Printed List")
+            print(now+"Printed List")
             await message.channel.send('\n'.join(str(x) for x in RefreshGames()))
         except Exception as e:
             print(e)
@@ -52,21 +54,35 @@ async def on_message(message):
             file.seek(0)
             json.dump(data, file)
 
-        RefreshGames()
-        print("Added : "+msg_list)
+        print(now+"Added : "+msg_list)
         await message.channel.send("Added : "+msg_list)
 
-    # reset array
+    # delete game
+    if message.content.startswith('$Del'):
+        msg_list = str(message.content)[5:]
+        try:
+            with open("games.json", "r+") as file:
+                data = json.load(file)
+                data.remove(msg_list)
+                file.seek(0)
+                with open("games.json", "w") as file2:
+                    data2 = []
+                    json.dump(data2, file2)
+                json.dump(data, file)
+        except Exception as e:
+            print(e)
+            await message.channel.send("There is no game called "+msg_list)
+        else:
+            print(now+"Deleted "+msg_list)
+            await message.channel.send("Deleted "+msg_list)
+
+    # reset all games
     if message.content.startswith('$Reset'):
         with open("games.json", "w") as file:
             data = []
             json.dump(data, file)
-
-        RefreshGames()
-        print("Resetted games")
+        print(now+"Resetted games")
         await message.channel.send("Resetted games")
-
-    # Delete a game
 
 try:
     client.run(token)
