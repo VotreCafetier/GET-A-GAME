@@ -53,7 +53,7 @@ async def on_message(message):
             data = json.load(file)
             data.append(msg_list)
             file.seek(0)
-            json.dump(data, file)
+            json.dump(data, file, sort_keys=True, indent=4)
 
         print(now+msg_author+"Added : "+msg_list)
         await message.channel.send("Added : "+msg_list)
@@ -68,8 +68,8 @@ async def on_message(message):
                 file.seek(0)
                 with open("games.json", "w") as file2:
                     data2 = []
-                    json.dump(data2, file2)
-                json.dump(data, file)
+                    json.dump(data2, file2, sort_keys=True, indent=4)
+                json.dump(data, file, sort_keys=True, indent=4)
         except Exception as e:
             print(e)
             await message.channel.send("There is no game called "+msg_list)
@@ -81,7 +81,7 @@ async def on_message(message):
     if message.content.startswith('$Reset'):
         with open("games.json", "w") as file:
             data = []
-            json.dump(data, file)
+            json.dump(data, file, sort_keys=True, indent=4)
         print(now+msg_author+"Resetted all games")
         await message.channel.send("Resetted games")
 
