@@ -15,6 +15,11 @@ def RefreshGames():
         return games_list
 
 
+def TextValidator(text):
+    if text == "":
+        return False
+    return True
+
 @client.event
 async def on_ready():
     print(now+'We have logged in as {0.user}'.format(client))
@@ -49,6 +54,10 @@ async def on_message(message):
     # Add an element to the game array
     if message.content.startswith('$Add'):
         msg_list = str(message.content)[5:]
+        if TextValidator(msg_list) is False:
+            await message.channel.send("Enter a valid name")
+            return
+
         with open("games.json", "r+") as file:
             data = json.load(file)
             data.append(msg_list)
@@ -61,6 +70,9 @@ async def on_message(message):
     # delete game
     if message.content.startswith('$Del'):
         msg_list = str(message.content)[5:]
+        if TextValidator(msg_list) is False:
+            await message.channel.send("Enter a valid name")
+            return
         try:
             with open("games.json", "r+") as file:
                 data = json.load(file)

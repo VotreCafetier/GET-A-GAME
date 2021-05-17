@@ -5,8 +5,8 @@ USING
 
 TODO
 - If , then delete or add multiple
-- Add nothing if nothing
-- Indent for games.json
+- Add a clean function which delete all chat record of bot
+
 
 [
     "Battlefield 4",
