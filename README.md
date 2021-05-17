@@ -4,7 +4,6 @@ USING
 - Discord
 
 TODO
-- Help : show all the command
 - If , then delete or add multiple
 - Add nothing if nothing
 - Create a log (which delete if too heavy)!Not important

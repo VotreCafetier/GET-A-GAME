@@ -85,6 +85,17 @@ async def on_message(message):
         print(now+msg_author+"Resetted all games")
         await message.channel.send("Resetted games")
 
+    # Help : Shows all the commands
+    if message.content.startswith('$Help'):
+        await message.channel.send(
+            "Here is the list of all the commands :\n\n"
+            "$Get : Generate a random game from the list\n"
+            "$List : Listing all the games\n"
+            "$Reset : Delete all the games\n"
+            "$Add : Add a specified game\n"
+            "$Del : Delete a specified game\n"
+        )
+
 try:
     client.run(token)
 except Exception as e:
