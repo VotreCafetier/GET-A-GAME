@@ -6,6 +6,7 @@ USING
 TODO
 - If , then delete or add multiple
 - Add a clean function which delete all chat record of bot
+- Add to raspberry pi and run it everyday
 
 
 [

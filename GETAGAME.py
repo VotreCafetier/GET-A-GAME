@@ -103,10 +103,12 @@ async def on_message(message):
             "Here is the list of all the commands :\n\n"
             "$Get : Generate a random game from the list\n"
             "$List : Listing all the games\n"
-            "$Reset : Delete all the games\n"
             "$Add : Add a specified game\n"
-            "$Del : Delete a specified game\n"
+            "$Reset : Delete all the games\n"
+            "$Del : Delete a specified game"
         )
+
+    # Clean : delete all message sent from bot
 
 try:
     client.run(token)
