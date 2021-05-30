@@ -41,6 +41,7 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send(now+"There is no game to choose from")
+        return
 
     # List all of the games
     if message.content.startswith('$List'):
@@ -50,6 +51,7 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("There is no game to choose from")
+        return
 
     # Add an element to the game array
     if message.content.startswith('$Add'):
@@ -66,6 +68,7 @@ async def on_message(message):
 
         print(now+msg_author+"Added : "+msg_list)
         await message.channel.send("Added : "+msg_list)
+        return
 
     # delete game
     if message.content.startswith('$Del'):
@@ -88,6 +91,7 @@ async def on_message(message):
         else:
             print(now+msg_author+"Deleted : "+msg_list)
             await message.channel.send("Deleted : "+msg_list)
+        return
 
     # reset all games
     if message.content.startswith('$Reset'):
@@ -96,6 +100,7 @@ async def on_message(message):
             json.dump(data, file, sort_keys=True, indent=4)
         print(now+msg_author+"Resetted all games")
         await message.channel.send("Resetted games")
+        return
 
     # Help : Shows all the commands
     if message.content.startswith('$Help'):
@@ -108,6 +113,7 @@ async def on_message(message):
             "$Del : Delete a specified game\n"
             "$Clean : Clean all of the bot chat history"
         )
+        return
 
     # Clean : delete all message sent from bot
     if message.content.startswith('$Clean'):
@@ -121,6 +127,9 @@ async def on_message(message):
 
         await message.channel.send("Delete successful")
         print(now+msg_author+"Deleted all chat record of bot")
+        return
+
+    await message.channel.send("There is no command")
 
 try:
     client.run(token)
