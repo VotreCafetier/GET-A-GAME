@@ -105,10 +105,22 @@ async def on_message(message):
             "$List : Listing all the games\n"
             "$Add : Add a specified game\n"
             "$Reset : Delete all the games\n"
-            "$Del : Delete a specified game"
+            "$Del : Delete a specified game\n"
+            "$Clean : Clean all of the bot chat history"
         )
 
     # Clean : delete all message sent from bot
+    if message.content.startswith('$Clean'):
+        await message.channel.send("Cleaning started")
+        async for msg in message.channel.history(limit=10000):
+            if msg.author == client.user:
+                try:
+                    await msg.delete()
+                except Exception as e:
+                    print(e)
+
+        await message.channel.send("Delete successful")
+        print(now+msg_author+"Deleted all chat record of bot")
 
 try:
     client.run(token)

@@ -6,7 +6,12 @@ USING
 TODO
 - If , then delete or add multiple
 - Add a clean function which delete all chat record of bot
-- Add to raspberry pi and run it everyday
+- Random but not already picked one
+- Connect to steam api for steam news
+- Add a default command to reply when there is no command specified
+- Add a clean function to delete all chat record for specified user
+- Fix clean function : delete last message sent after a short time
+- Create a log
 
 
 [
