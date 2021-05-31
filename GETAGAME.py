@@ -4,6 +4,7 @@ import json
 import datetime
 from secrets import discord_token
 from uptime import boottime
+import psutil
 
 client = discord.Client()
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
@@ -134,8 +135,16 @@ async def on_message(message):
 
     # Status : Get system up time
     if message.content.startswith('$Status'):
+        # Get system info
+        uptime = str(boottime())
+        LoadCPU = str(psutil.cpu_percent())
+        VMEM = str(psutil.virtual_memory()[2])
+        await message.channel.send(
+            "Up since : "+uptime
+            + "\nCPU Load : "+LoadCPU
+            + '\nMemory % used: '+VMEM
+        )
         print(now+msg_author+"Asked for status")
-        await message.channel.send("Up since : "+str(boottime()))
         return
 
     await message.channel.send("There is no command")

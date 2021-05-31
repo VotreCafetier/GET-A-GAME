@@ -3,6 +3,7 @@
 USING
 - Discord
 - uptime
+- psutil
 
 TODO
 - If , then delete or add multiple
