@@ -123,7 +123,7 @@ async def on_message(message):
     if message.content.startswith('$Clean'):
         await message.channel.send("Cleaning started")
         async for msg in message.channel.history(limit=10000):
-            if msg.author == client.user:
+            if msg.author == client.user or msg.content.startswith('$'):
                 try:
                     await msg.delete()
                 except Exception as e:

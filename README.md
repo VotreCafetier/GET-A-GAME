@@ -11,11 +11,11 @@ TODO
 - Add a clean function to delete all chat record for specified user
 - Fix clean function : delete last message sent after a short time
 - Fix clean function : delete show first message sent til there its finished
-- Fix clean function : delete all message beginning with $
-- status : Info about load of pi, is a minecraft srv running
+- status : is a minecraft srv running
 - $News : Give News related to steam, etc.
 - $Info [Username] : Give steam info of this username
 - Add index number with list and delete with number
+- You can open a minecraft srv
 
 
 [
