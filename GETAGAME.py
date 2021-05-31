@@ -2,8 +2,8 @@ import random
 import discord
 import json
 import datetime
+from secrets import discord_token
 
-token = "NDY5NTkwODM4NjM3NDk0Mjc0.W1DqjA.oyh7oyUOQxWeAHAB3lNkJe9_eLo"
 client = discord.Client()
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
 
@@ -132,6 +132,6 @@ async def on_message(message):
     await message.channel.send("There is no command")
 
 try:
-    client.run(token)
+    client.run(discord_token)
 except Exception as e:
     print(e)
