@@ -3,6 +3,7 @@ import discord
 import json
 import datetime
 from secrets import discord_token
+from uptime import boottime
 
 client = discord.Client()
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
@@ -19,6 +20,7 @@ def TextValidator(text):
     if text == "":
         return False
     return True
+
 
 @client.event
 async def on_ready():
@@ -111,7 +113,8 @@ async def on_message(message):
             "$Add : Add a specified game\n"
             "$Reset : Delete all the games\n"
             "$Del : Delete a specified game\n"
-            "$Clean : Clean all of the bot chat history"
+            "$Clean : Clean all of the bot chat history\n"
+            "$Status : Show status of servers"
         )
         return
 
@@ -127,6 +130,12 @@ async def on_message(message):
 
         await message.channel.send("Delete successful")
         print(now+msg_author+"Deleted all chat record of bot")
+        return
+
+    # Status : Get system up time
+    if message.content.startswith('$Status'):
+        print(now+msg_author+"Asked for status")
+        await message.channel.send("Up since : "+str(boottime()))
         return
 
     await message.channel.send("There is no command")

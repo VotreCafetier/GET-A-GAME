@@ -2,6 +2,7 @@
 
 USING
 - Discord
+- uptime
 
 TODO
 - If , then delete or add multiple
@@ -10,7 +11,7 @@ TODO
 - Fix clean function : delete last message sent after a short time
 - Fix clean function : delete show first message sent til there its finished
 - Fix clean function : delete all message beginning with $
-- status : give time since up, Info about load of pi
+- status : Info about load of pi, is a minecraft srv running
 - $News : Give News related to steam, etc.
 - $Info [Username] : Give steam info of this username
 - Add index number with list and delete with number
