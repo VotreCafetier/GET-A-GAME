@@ -1,18 +1,23 @@
 import random
+import os
 import discord
 import json
 import datetime
-from secrets import discord_token
 from uptime import boottime
 import psutil
 
+discord_token = "NDY5NTkwODM4NjM3NDk0Mjc0.W1DqjA.oyh7oyUOQxWeAHAB3lNkJe9_eLo"
 client = discord.Client()
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
 
 
+def getcurrentdir(dir):
+    return os.getcwd()+"/"+dir
+
+
 def RefreshGames():
     # Open games from json
-    with open('games.json') as f:
+    with open(getcurrentdir("games.json")) as f:
         games_list = json.load(f)
         return games_list
 
@@ -80,11 +85,11 @@ async def on_message(message):
             await message.channel.send("Enter a valid name")
             return
         try:
-            with open("games.json", "r+") as file:
+            with open(getcurrentdir("games.json"), "r+") as file:
                 data = json.load(file)
                 data.remove(msg_list)
                 file.seek(0)
-                with open("games.json", "w") as file2:
+                with open(getcurrentdir("games.json"), "w") as file2:
                     data2 = []
                     json.dump(data2, file2, sort_keys=True, indent=4)
                 json.dump(data, file, sort_keys=True, indent=4)
@@ -98,7 +103,7 @@ async def on_message(message):
 
     # reset all games
     if message.content.startswith('$Reset'):
-        with open("games.json", "w") as file:
+        with open(getcurrentdir("games.json"), "w") as file:
             data = []
             json.dump(data, file, sort_keys=True, indent=4)
         print(now+msg_author+"Resetted all games")
@@ -130,7 +135,7 @@ async def on_message(message):
                     print(e)
 
         await message.channel.send("Delete successful")
-        print(now+msg_author+"Deleted all chat record of bot")
+        print(now+msg_author+"Deleted all chat record for and by bot")
         return
 
     # Status : Get system up time
