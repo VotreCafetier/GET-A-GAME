@@ -1,11 +1,11 @@
 # Discord bot for choosing a game
 
-USING
+=== USING ===
 - Discord
 - uptime
 - psutil
 
-TODO
+=== TODO ===
 - If , then delete or add multiple
 - Random but not already picked one
 - Add a clean function to delete all chat record for specified user
@@ -17,8 +17,6 @@ TODO
 - $Info [Username] : Give steam info of this username
 - Add index number with list and delete with number
 - You can open a minecraft srv
-- $Sacre-moi : donne une sacre au hazard
-- Fix when he says there is no command when there is no $ before
 
 
 [
