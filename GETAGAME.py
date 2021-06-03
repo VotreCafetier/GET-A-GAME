@@ -163,7 +163,8 @@ async def on_message(message):
             await message.channel.send("There was an error")
         return
 
-    await message.channel.send("There is no command")
+    if message.content.startswith('$'):
+        await message.channel.send("There is no command")
 
 try:
     client.run(discord_token)
