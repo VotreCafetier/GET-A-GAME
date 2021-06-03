@@ -17,6 +17,9 @@
 - $Info [Username] : Give steam info of this username
 - Add index number with list and delete with number
 - You can open a minecraft srv
+- Make multithreading for apis
+- Link to yt_api to get video
+- Séparer help section
 
 
 [

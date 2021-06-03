@@ -5,6 +5,7 @@ import json
 import datetime
 from uptime import boottime
 import psutil
+import requests
 
 discord_token = "NDY5NTkwODM4NjM3NDk0Mjc0.W1DqjA.oyh7oyUOQxWeAHAB3lNkJe9_eLo"
 client = discord.Client()
@@ -22,6 +23,17 @@ def TextValidator(text):
     if text == "":
         return False
     return True
+
+
+def GetAffirmation():
+    affirmations_api = "https://www.affirmations.dev/"
+    response = requests.get(affirmations_api)
+    return response.json()["affirmation"]
+
+
+def GetJoke():
+    response = requests.get("https://icanhazdadjoke.com/slack")
+    return response.json()['attachments'][0]['fallback']
 
 
 @client.event
@@ -117,7 +129,9 @@ async def on_message(message):
             "$Del : Delete a specified game\n"
             "$Clean : Clean all of the bot chat history\n"
             "$Status : Show status of servers\n"
-            "$Sacre-moi : Generate a random sacre"
+            "$Sacre-moi : Generate a random sacre\n"
+            "$Motivate-me : Give a motivationnal quote\n"
+            "$Joke : Get a joke"
         )
         return
 
@@ -161,6 +175,18 @@ async def on_message(message):
         except Exception as e:
             print(e)
             await message.channel.send("There was an error")
+        return
+
+    # Motivate-me : Give a motivationnal phrase
+    if message.content.startswith('$Motivate-me'):
+        print(now+msg_author+"Asked for a motivationnal quote")
+        await message.channel.send(GetAffirmation())
+        return
+
+    # $Joke : Get a joke
+    if message.content.startswith('$Joke'):
+        print(now+msg_author+"Asked for a joke")
+        await message.channel.send(GetJoke())
         return
 
     if message.content.startswith('$'):
