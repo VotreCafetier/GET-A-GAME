@@ -18,6 +18,7 @@ TODO
 - Add index number with list and delete with number
 - You can open a minecraft srv
 - $Sacre-moi : donne une sacre au hazard
+- Fix when he says there is no command when there is no $ before
 
 
 [

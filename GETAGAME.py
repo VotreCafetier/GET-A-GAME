@@ -44,7 +44,7 @@ async def on_message(message):
             await message.channel.send(rnd_game)
         except Exception as e:
             print(e)
-            await message.channel.send(now+"There is no game to choose from")
+            await message.channel.send("There is no game to choose from")
         return
 
     # List all of the games
@@ -116,7 +116,8 @@ async def on_message(message):
             "$Reset : Delete all the games\n"
             "$Del : Delete a specified game\n"
             "$Clean : Clean all of the bot chat history\n"
-            "$Status : Show status of servers"
+            "$Status : Show status of servers\n"
+            "$Sacre-moi : Generate a random sacre"
         )
         return
 
@@ -146,6 +147,20 @@ async def on_message(message):
             + '\nMemory % used: '+VMEM
         )
         print(now+msg_author+"Asked for status")
+        return
+
+    # Sacre-moi : Donne une sacre au hazard
+    if message.content.startswith('$Sacre-moi'):
+        try:
+            # Open sacre from json
+            with open("sacre.json") as f:
+                rnd_sacre = json.load(f)
+            rnd_sacre = random.choice(rnd_sacre)
+            print(now+msg_author+"Generated a random sacre : "+rnd_sacre)
+            await message.channel.send(rnd_sacre)
+        except Exception as e:
+            print(e)
+            await message.channel.send("There was an error")
         return
 
     await message.channel.send("There is no command")
