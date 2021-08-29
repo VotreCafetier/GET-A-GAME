@@ -20,6 +20,7 @@
 - Make multithreading for apis
 - Link to yt_api to get video
 - Séparer help section
+- Hide misc command
 
 
 [
