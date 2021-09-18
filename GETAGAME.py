@@ -24,13 +24,6 @@ def TextValidator(text):
         return False
     return True
 
-
-def GetAffirmation():
-    affirmations_api = "https://www.affirmations.dev/"
-    response = requests.get(affirmations_api)
-    return response.json()["affirmation"]
-
-
 def GetJoke():
     response = requests.get("https://icanhazdadjoke.com/slack")
     return response.json()['attachments'][0]['fallback']
@@ -45,8 +38,7 @@ async def on_ready():
 async def on_message(message):
     msg_author = str(message.author)+" "
     # Prevent the bot to reply to itself
-    if message.author == client.user:
-        return
+    if message.author == client.user: return
 
     # Generate a random games
     if message.content.startswith('$Get'):
@@ -129,8 +121,6 @@ async def on_message(message):
             "$Del : Delete a specified game\n"
             "$Clean : Clean all of the bot chat history\n"
             "$Status : Show status of servers\n"
-            "$Sacre-moi : Generate a random sacre\n"
-            "$Motivate-me : Give a motivationnal quote\n"
             "$Joke : Get a joke"
         )
         return
@@ -161,26 +151,6 @@ async def on_message(message):
             + '\nMemory % used: '+VMEM
         )
         print(now+msg_author+"Asked for status")
-        return
-
-    # Sacre-moi : Donne une sacre au hazard
-    if message.content.startswith('$Sacre-moi'):
-        try:
-            # Open sacre from json
-            with open("sacre.json") as f:
-                rnd_sacre = json.load(f)
-            rnd_sacre = random.choice(rnd_sacre)
-            print(now+msg_author+"Generated a random sacre : "+rnd_sacre)
-            await message.channel.send(rnd_sacre)
-        except Exception as e:
-            print(e)
-            await message.channel.send("There was an error")
-        return
-
-    # Motivate-me : Give a motivationnal phrase
-    if message.content.startswith('$Motivate-me'):
-        print(now+msg_author+"Asked for a motivationnal quote")
-        await message.channel.send(GetAffirmation())
         return
 
     # $Joke : Get a joke
