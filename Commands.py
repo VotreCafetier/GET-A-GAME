@@ -94,7 +94,11 @@ async def Clean(author, m, client):
     # if there is still message, bruteforce
     async for msg in m.channel.history(limit=10000):
         if msg.author == client.user or msg.content.startswith('$'):
-            await msg.delete()
+            try:
+                await msg.delete()
+            except Exception as e:
+                print(e)
+                continue
 
     print(now+author+"Deleted all chat record for and by bot")
     return ("Delete successful")
