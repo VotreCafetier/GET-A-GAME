@@ -12,13 +12,9 @@
 - Fix clean function : delete last message sent after a short time
 - Fix clean function : delete show first message sent til there its finished
 - Fix clean function : add a message after it reached 10 000 message(the limit)
-- status : is a minecraft srv running
-- $News : Give News related to steam, etc.
-- $Info [Username] : Give steam info of this username
 - Add index number with list and delete with number
-- You can open a minecraft srv
-- Séparer help section
 - Redo Clean function
+- Delete __pycache__
 
 
 [

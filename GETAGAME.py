@@ -1,3 +1,4 @@
+# Modules import
 import random
 import os
 import discord
@@ -7,27 +8,12 @@ from uptime import boottime
 import psutil
 import requests
 
-discord_token = "NDY5NTkwODM4NjM3NDk0Mjc0.W1DqjA.oyh7oyUOQxWeAHAB3lNkJe9_eLo"
+# Files import
+from Commands import *
+import secrets
+
+
 client = discord.Client()
-now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
-
-
-def RefreshGames():
-    # Open games from json
-    with open("games.json") as f:
-        games_list = json.load(f)
-        return games_list
-
-
-def TextValidator(text):
-    if text == "":
-        return False
-    return True
-
-def GetJoke():
-    response = requests.get("https://icanhazdadjoke.com/slack")
-    return response.json()['attachments'][0]['fallback']
-
 
 @client.event
 async def on_ready():
@@ -42,127 +28,74 @@ async def on_message(message):
 
     # Generate a random games
     if message.content.startswith('$Get'):
-        try:
-            rnd_game = random.choice(RefreshGames())
-            print(now+msg_author+"Generated a random game : "+rnd_game)
-            await message.channel.send(rnd_game)
-        except Exception as e:
-            print(e)
-            await message.channel.send("There is no game to choose from")
+        await message.channel.send(Get(msg_author))
         return
 
     # List all of the games
     if message.content.startswith('$List'):
-        try:
-            print(now+msg_author+"Listed all the games")
-            await message.channel.send('\n'.join(str(x) for x in RefreshGames()))
-        except Exception as e:
-            print(e)
-            await message.channel.send("There is no game to choose from")
+        await message.channel.send(List(msg_author))
         return
 
     # Add an element to the game array
     if message.content.startswith('$Add'):
-        msg_list = str(message.content)[5:]
-        if TextValidator(msg_list) is False:
-            await message.channel.send("Enter a valid name")
-            return
-
-        with open("games.json", "r+") as file:
-            data = json.load(file)
-            data.append(msg_list)
-            file.seek(0)
-            json.dump(data, file, sort_keys=True, indent=4)
-
-        print(now+msg_author+"Added : "+msg_list)
-        await message.channel.send("Added : "+msg_list)
+        await message.channel.send(Add(msg_author, message.content))
         return
 
     # delete game
     if message.content.startswith('$Del'):
-        msg_list = str(message.content)[5:]
-        if TextValidator(msg_list) is False:
-            await message.channel.send("Enter a valid name")
-            return
-        try:
-            with open("games.json", "r+") as file:
-                data = json.load(file)
-                data.remove(msg_list)
-                file.seek(0)
-                with open("games.json", "w") as file2:
-                    data2 = []
-                    json.dump(data2, file2, sort_keys=True, indent=4)
-                json.dump(data, file, sort_keys=True, indent=4)
-        except Exception as e:
-            print(e)
-            await message.channel.send("There is no game called "+msg_list)
-        else:
-            print(now+msg_author+"Deleted : "+msg_list)
-            await message.channel.send("Deleted : "+msg_list)
+        await message.channel.send(Delete(msg_author, message.content))
         return
 
     # reset all games
     if message.content.startswith('$Reset'):
-        with open("games.json", "w") as file:
-            data = []
-            json.dump(data, file, sort_keys=True, indent=4)
-        print(now+msg_author+"Resetted all games")
-        await message.channel.send("Resetted games")
+        await message.channel.send(Reset(msg_author))
         return
 
     # Help : Shows all the commands
     if message.content.startswith('$Help'):
         await message.channel.send(
-            "Here is the list of all the commands :\n\n"
+            "Here is the list of all the commands :\n"
+            "--- Games ---\n"
             "$Get : Generate a random game from the list\n"
             "$List : Listing all the games\n"
             "$Add : Add a specified game\n"
             "$Reset : Delete all the games\n"
-            "$Del : Delete a specified game\n"
+            "$Del : Delete a specified game\n\n"
+            "--- Misc ---\n"
             "$Clean : Clean all of the bot chat history\n"
-            "$Status : Show status of servers\n"
-            "$Joke : Get a joke"
+            "$Status : Show status of servers"
         )
         return
 
     # Clean : delete all message sent from bot
+    """
     if message.content.startswith('$Clean'):
         await message.channel.send("Cleaning started")
         async for msg in message.channel.history(limit=10000):
             if msg.author == client.user or msg.content.startswith('$'):
-                try:
-                    await msg.delete()
-                except Exception as e:
-                    print(e)
+                await msg.delete()
 
         await message.channel.send("Delete successful")
         print(now+msg_author+"Deleted all chat record for and by bot")
         return
+    """
+
+    if message.content.startswith('$Clean'):
+        await message.channel.send("Cleaning started")
+        await message.channel.send(await Clean(msg_author, message, client))
+        return
+
 
     # Status : Get system up time
     if message.content.startswith('$Status'):
-        # Get system info
-        uptime = str(boottime())
-        LoadCPU = str(psutil.cpu_percent())
-        VMEM = str(psutil.virtual_memory()[2])
-        await message.channel.send(
-            "Up since : "+uptime
-            + "\nCPU Load : "+LoadCPU
-            + '\nMemory % used: '+VMEM
-        )
-        print(now+msg_author+"Asked for status")
+        await message.channel.send(Status(msg_author))
         return
 
-    # $Joke : Get a joke
-    if message.content.startswith('$Joke'):
-        print(now+msg_author+"Asked for a joke")
-        await message.channel.send(GetJoke())
-        return
-
+    # Default value if no command
     if message.content.startswith('$'):
         await message.channel.send("There is no command")
 
 try:
-    client.run(discord_token)
+    client.run(secrets.discord_token)
 except Exception as e:
     print(e)
