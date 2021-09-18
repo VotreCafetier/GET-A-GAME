@@ -9,7 +9,7 @@ import psutil
 import requests
 
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
-loop = asyncio.get_event_loop()
+
 
 def RefreshGames():
     # Open games from json
@@ -17,16 +17,10 @@ def RefreshGames():
         games_list = json.load(f)
         return games_list
 
-"""
-def TextValidator(text):
-    if text == "":
-        return False
-    return True
-"""
-
 # GAMES
 def Get(author):
-    if RefreshGames() == []: return "There is no game to choose from"
+    if RefreshGames() == []:
+        return "There is no game to choose from"
     rnd_game = random.choice(RefreshGames())
     print(now+author+"Generated a random game : "+rnd_game)
     return rnd_game
@@ -34,7 +28,8 @@ def Get(author):
 
 def Add(author, message):
     msg_list = str(message)[5:]
-    if msg_list == "": return "Enter a valid name"
+    if msg_list == "":
+        return "Enter a valid name"
     with open("games.json", "r+") as file:
         data = json.load(file)
         data.append(msg_list)
@@ -47,7 +42,8 @@ def Add(author, message):
 
 def Delete(author, message):
     msg_list = str(message)[5:]
-    if msg_list == "": return "Enter a valid name"
+    if msg_list == "":
+        return "Enter a valid name"
     try:
         with open("games.json", "r+") as file:
             data = json.load(file)
@@ -76,8 +72,9 @@ def Reset(author):
 def List(author):
     if RefreshGames() == []: return "There is no game to choose from"
     print(now+author+"Listed all the games")
-    return '\n'.join(str(x) for x in RefreshGames())
-
+    z = ''
+    for idx, val in enumerate(RefreshGames()): z += (f'[{idx}] {val}\n')
+    return z
 
 
 # CHANNELS
@@ -98,8 +95,6 @@ async def Clean(author, m, client):
     async for msg in m.channel.history(limit=10000):
         if msg.author == client.user or msg.content.startswith('$'):
             await msg.delete()
-
-        else: break
 
     print(now+author+"Deleted all chat record for and by bot")
     return ("Delete successful")

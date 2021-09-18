@@ -15,6 +15,7 @@ import secrets
 
 client = discord.Client()
 
+
 @client.event
 async def on_ready():
     print(now+'We have logged in as {0.user}'.format(client))
@@ -24,7 +25,8 @@ async def on_ready():
 async def on_message(message):
     msg_author = str(message.author)+" "
     # Prevent the bot to reply to itself
-    if message.author == client.user: return
+    if message.author == client.user:
+        return
 
     # Generate a random games
     if message.content.startswith('$Get'):
@@ -73,8 +75,7 @@ async def on_message(message):
         await message.channel.send(await Clean(msg_author, message, client))
         return
 
-
-    # Status : Get system up time
+    #  Status : Get system up time
     if message.content.startswith('$Status'):
         await message.channel.send(Status(msg_author))
         return
