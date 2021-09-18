@@ -68,18 +68,6 @@ async def on_message(message):
         return
 
     # Clean : delete all message sent from bot
-    """
-    if message.content.startswith('$Clean'):
-        await message.channel.send("Cleaning started")
-        async for msg in message.channel.history(limit=10000):
-            if msg.author == client.user or msg.content.startswith('$'):
-                await msg.delete()
-
-        await message.channel.send("Delete successful")
-        print(now+msg_author+"Deleted all chat record for and by bot")
-        return
-    """
-
     if message.content.startswith('$Clean'):
         await message.channel.send("Cleaning started")
         await message.channel.send(await Clean(msg_author, message, client))
