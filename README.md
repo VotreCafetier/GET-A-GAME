@@ -15,6 +15,9 @@
 - Add index number with list and delete with number
 - Redo Clean function
 - Replace prints with loggin
+- Add multi server support
+- Add private message response
+- You can invite bot using private message
 
 
 [
