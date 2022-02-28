@@ -14,7 +14,7 @@
 - Fix clean function : add a message after it reached 10 000 message(the limit)
 - Add index number with list and delete with number
 - Redo Clean function
-- Delete __pycache__
+- Replace prints with loggin
 
 
 [
