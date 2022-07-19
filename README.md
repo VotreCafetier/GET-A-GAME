@@ -6,6 +6,7 @@
 - psutil
 
 === TODO ===
+- If instance of app already running, dont start
 - If , then delete or add multiple
 - Random but not already picked one
 - Add a clean function to delete all chat record for specified user
