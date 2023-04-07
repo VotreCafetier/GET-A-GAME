@@ -1,0 +1,4 @@
+psutil==5.9.4
+discord==2.2.2
+requests==2.28.2
+uptime==3.0.1

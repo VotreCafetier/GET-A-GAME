@@ -1,32 +1,24 @@
-import asyncio
-import json
-import random
-import os
-import datetime
-import discord
+import asyncio, json, random, os, datetime, discord, psutil, requests
 from uptime import boottime
-import psutil
-import requests
 
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
 
-
-def RefreshGames():
+def refresh_games() -> list[str]:
     # Open games from json
     with open("games.json") as f:
         games_list = json.load(f)
         return games_list
 
 # GAMES
-def Get(author):
-    if RefreshGames() == []:
+def get_game(author:str) -> str:
+    if refresh_games() == []:
         return "There is no game to choose from"
-    rnd_game = random.choice(RefreshGames())
+    rnd_game = random.choice(refresh_games())
     print(now+author+"Generated a random game : "+rnd_game)
     return rnd_game
 
 
-def Add(author, message):
+def add_game(author:str, message:str) -> str:
     msg_list = str(message)[5:]
     if msg_list == "":
         return "Enter a valid name"
@@ -40,7 +32,7 @@ def Add(author, message):
     return "Added : "+msg_list
 
 
-def Delete(author, message):
+def delete_game(author:str, message:str) -> str:
     msg_list = str(message)[5:]
     if msg_list == "":
         return "Enter a valid name"
@@ -61,7 +53,7 @@ def Delete(author, message):
         return "Deleted : "+msg_list
 
 
-def Reset(author):
+def reset_games(author:str) -> str:
     with open("games.json", "w") as file:
         data = []
         json.dump(data, file, sort_keys=True, indent=4)
@@ -69,16 +61,16 @@ def Reset(author):
     return "Resetted games"
 
 
-def List(author):
-    if RefreshGames() == []: return "There is no game to choose from"
+def list_games(author:str) -> str:
+    if refresh_games() == []: return "There is no game to choose from"
     print(now+author+"Listed all the games")
     z = ''
-    for idx, val in enumerate(RefreshGames()): z += (f'[{idx}] {val}\n')
+    for idx, val in enumerate(refresh_games()): z += (f'[{idx}] {val}\n')
     return z
 
 
 # CHANNELS
-async def Clean(author, m, client):
+async def clean(author:str, m:discord.message, client:discord.client) -> str:
     temp = []
     async for msg in m.channel.history(limit=10000):
         if msg.author == client.user or msg.content.startswith('$'):
@@ -105,8 +97,7 @@ async def Clean(author, m, client):
 
 
 # MISC
-def Status(author):
-    # Get system info
+def status(author:str) -> str:
     uptime = str(boottime())
     LoadCPU = str(psutil.cpu_percent())
     VMEM = str(psutil.virtual_memory()[2])

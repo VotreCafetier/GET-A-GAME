@@ -1,19 +1,12 @@
-# Modules import
-import random
-import os
-import discord
-import json
-import datetime
+import random, os, discord, json, datetime, psutil, requests
 from uptime import boottime
-import psutil
-import requests
 
 # Files import
 from Commands import *
 import secrets
 
 
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.default())
 
 
 @client.event
@@ -30,27 +23,27 @@ async def on_message(message):
 
     # Generate a random games
     if message.content.startswith('$Get'):
-        await message.channel.send(Get(msg_author))
+        await message.channel.send(get_game(msg_author))
         return
 
     # List all of the games
     if message.content.startswith('$List'):
-        await message.channel.send(List(msg_author))
+        await message.channel.send(list_games(msg_author))
         return
 
     # Add an element to the game array
     if message.content.startswith('$Add'):
-        await message.channel.send(Add(msg_author, message.content))
+        await message.channel.send(add_game(msg_author, message.content))
         return
 
     # delete game
     if message.content.startswith('$Del'):
-        await message.channel.send(Delete(msg_author, message.content))
+        await message.channel.send(delete_game(msg_author, message.content))
         return
 
     # reset all games
     if message.content.startswith('$Reset'):
-        await message.channel.send(Reset(msg_author))
+        await message.channel.send(reset_games(msg_author))
         return
 
     # Help : Shows all the commands
@@ -72,12 +65,12 @@ async def on_message(message):
     # Clean : delete all message sent from bot
     if message.content.startswith('$Clean'):
         await message.channel.send("Cleaning started")
-        await message.channel.send(await Clean(msg_author, message, client))
+        await message.channel.send(await clean(msg_author, message, client))
         return
 
     #  Status : Get system up time
     if message.content.startswith('$Status'):
-        await message.channel.send(Status(msg_author))
+        await message.channel.send(status(msg_author))
         return
 
     # Default value if no command
