@@ -1,11 +1,14 @@
 # Discord bot for choosing a game
 
 === USING ===
-- Discord
-- uptime
 - psutil
+- discord
+- requests
+- uptime
 
 === TODO ===
+- Implement intents (right now the bot doesnt work)
+- implement AIOFILES
 - If instance of app already running, dont start
 - If , then delete or add multiple
 - Random but not already picked one

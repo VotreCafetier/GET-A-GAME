@@ -5,8 +5,9 @@ from uptime import boottime
 from Commands import *
 import secrets
 
+intents = discord.Intents(messages=True)
 
-client = discord.Client(intents=discord.Intents.default())
+client = discord.Client(intents=intents)
 
 
 @client.event
@@ -16,6 +17,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    print(message.content)
+    print(message.channel)
     msg_author = str(message.author)+" "
     # Prevent the bot to reply to itself
     if message.author == client.user:
