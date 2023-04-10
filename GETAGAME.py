@@ -9,13 +9,8 @@ logging.basicConfig(level=logging.INFO)
 
 intents = discord.Intents.default()
 intents.message_content = True
-client = discord.Client(intents=intents)
 
 bot = commands.Bot(command_prefix='$', intents=intents)
-
-@client.event
-async def on_ready():
-    print(now+'We have logged in as {0.user}'.format(client))
 
 @bot.event
 async def on_ready():
@@ -23,23 +18,23 @@ async def on_ready():
 
 @bot.command()
 async def get(ctx):
-    await ctx.send(get_rnd_game(str(ctx.author)))
+    await ctx.send(await get_rnd_game(str(ctx.author)))
 
 @bot.command(name='list')
 async def _list(ctx):
-    await ctx.send(list_games(str(ctx.author)))
+    await ctx.send(await list_games(str(ctx.author)))
 
 @bot.command()
 async def add(ctx, game):
-    await ctx.send(add_game(str(ctx.author), game))
-""" 
-@bot.command()
-async def del(ctx, game):
+    await ctx.send(await add_game(str(ctx.author), game))
+
+@bot.command(name='del')
+async def _del(ctx, game):
     await ctx.send(delete_game(str(ctx.author), game))
- """
+
 @bot.command()
 async def reset(ctx):
-    await ctx.send(reset_games(str(ctx.author)))
+    await ctx.send(await reset_games(str(ctx.author)))
 """ 
 @bot.command()
 async def help(ctx):

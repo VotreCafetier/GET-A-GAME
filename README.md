@@ -5,11 +5,13 @@
 - discord
 - requests
 - uptime
+- AIOFILES
 
 === TODO ===
-- implement AIOFILES
+- print time with logger
 - If instance of app already running, dont start
 - If , then delete or add multiple
+- Add "" to insert string
 - Random but not already picked one
 - Add a clean function to delete all chat record for specified user
 - Fix clean function : delete last message sent after a short time
@@ -22,16 +24,3 @@
 - You can invite bot using private message
 
 ~~- Implement Logging library~~
-
-[
-    "Battlefield 4",
-    "Dead By Daylight",
-    "Starcraft 2",
-    "Minecraft",
-    "Tom Clancy's Rainbow Six Siege",
-    "Halo: The Master Chief Collection",
-    "Apex Legends",
-    "Osu!",
-    "Overwatch",
-    "Escape From Tarkov"
-]

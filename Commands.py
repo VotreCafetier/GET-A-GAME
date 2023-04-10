@@ -1,4 +1,4 @@
-import json, random, datetime, discord, psutil, logging
+import json, random, datetime, discord, psutil, logging, aiofiles
 from pathlib import Path
 
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
@@ -8,20 +8,20 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Get games from games.json
-def get_games() -> list[str]:
+async def get_games() -> list[str]:
     games_list = []
     try:
-        with open(FILENAME) as f:
-            games_list = json.load(f)
+        async with aiofiles.open(FILENAME, "r") as f:
+            games_list = json.loads(await f.read())
     except FileNotFoundError:
-        with open(FILENAME, 'w') as f:
-            json.dump(games_list, f, indent=4)
+        async with aiofiles.open(FILENAME, 'w') as f:
+            await f.write(json.dumps(games_list, indent=4))
 
     return games_list
 
 
-def get_rnd_game(author:str) -> str:
-    games_list = get_games()
+async def get_rnd_game(author:str) -> str:
+    games_list = await get_games()
     if not games_list:
         return "There is no game to choose from"
     rnd_game = random.choice(games_list)
@@ -29,32 +29,32 @@ def get_rnd_game(author:str) -> str:
     return rnd_game
 
 
-def add_game(author:str, message:str) -> str:
+async def add_game(author:str, message:str) -> str:
     msg_list = message
     if msg_list == "":
         return "Enter a valid name"
-    with FILENAME.open("r+") as file:
-        data = json.load(file)
+    async with aiofiles.open(FILENAME, "r+") as file:
+        data = json.loads(await file.read())
         data.append(msg_list)
         file.seek(0)
-        json.dump(data, file, sort_keys=True, indent=4)
+        await file.write(json.dumps(data, sort_keys=True, indent=4))
 
     logger.info(f"{now}{author} Added: {msg_list}")
     return f"Added: {msg_list}"
 
 
-def delete_game(author:str, message:str) -> str:
+async def delete_game(author:str, message:str) -> str:
     msg_list = message
     if msg_list == "":
         return "Enter a valid name"
     try:
-        with FILENAME.open("r+") as file:
-            data = json.load(file)
+        async with aiofiles.open(FILENAME, "r+") as file:
+            data = json.loads(await file.read())
             if msg_list not in data:
                 raise ValueError
             data.remove(msg_list)
             file.seek(0)
-            json.dump(data, file, sort_keys=True, indent=4)
+            await file.write(json.dumps(data, sort_keys=True, indent=4))
     except ValueError:
         return f"There is no game called {msg_list}"
     else:
@@ -62,16 +62,16 @@ def delete_game(author:str, message:str) -> str:
         return f"Deleted: {msg_list}"
 
 
-def reset_games(author:str) -> str:
-    with FILENAME.open("w") as file:
+async def reset_games(author:str) -> str:
+    async with aiofiles.open(FILENAME, "w") as file:
         data = []
-        json.dump(data, file, sort_keys=True, indent=4)
+        await file.write(json.dumps(data, sort_keys=True, indent=4))
     logger.info(f"{now}{author} Resetted all games")
     return "Resetted games"
 
 
-def list_games(author:str) -> str:
-    games = get_games()
+async def list_games(author:str) -> str:
+    games = await get_games()
     if not games:
         return "There is no game to choose from"
     
