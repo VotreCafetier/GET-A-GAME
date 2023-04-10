@@ -8,7 +8,6 @@
 - AIOFILES
 
 === TODO ===
-- print time with logger
 - If instance of app already running, dont start
 - If , then delete or add multiple
 - Add "" to insert string
