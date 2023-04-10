@@ -7,7 +7,6 @@
 - uptime
 
 === TODO ===
-- Implement intents (right now the bot doesnt work)
 - implement AIOFILES
 - If instance of app already running, dont start
 - If , then delete or add multiple
@@ -18,11 +17,11 @@
 - Fix clean function : add a message after it reached 10 000 message(the limit)
 - Add index number with list and delete with number
 - Redo Clean function
-- Replace prints with loggin
 - Add multi server support
 - Add private message response
 - You can invite bot using private message
 
+~~- Implement Logging library~~
 
 [
     "Battlefield 4",

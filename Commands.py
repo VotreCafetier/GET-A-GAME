@@ -1,72 +1,83 @@
-import asyncio, json, random, os, datetime, discord, psutil, requests
-from uptime import boottime
+import json, random, datetime, discord, psutil, logging
+from pathlib import Path
 
 now = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S] ")
+FILENAME = Path("games.json")
 
-def refresh_games() -> list[str]:
-    # Open games from json
-    with open("games.json") as f:
-        games_list = json.load(f)
-        return games_list
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# GAMES
-def get_game(author:str) -> str:
-    if refresh_games() == []:
+# Get games from games.json
+def get_games() -> list[str]:
+    games_list = []
+    try:
+        with open(FILENAME) as f:
+            games_list = json.load(f)
+    except FileNotFoundError:
+        with open(FILENAME, 'w') as f:
+            json.dump(games_list, f, indent=4)
+
+    return games_list
+
+
+def get_rnd_game(author:str) -> str:
+    games_list = get_games()
+    if not games_list:
         return "There is no game to choose from"
-    rnd_game = random.choice(refresh_games())
-    print(now+author+"Generated a random game : "+rnd_game)
+    rnd_game = random.choice(games_list)
+    logger.info(f"{now}{author} Generated a random game: {rnd_game}")
     return rnd_game
 
 
 def add_game(author:str, message:str) -> str:
-    msg_list = str(message)[5:]
+    msg_list = message
     if msg_list == "":
         return "Enter a valid name"
-    with open("games.json", "r+") as file:
+    with FILENAME.open("r+") as file:
         data = json.load(file)
         data.append(msg_list)
         file.seek(0)
         json.dump(data, file, sort_keys=True, indent=4)
 
-    print(now+author+"Added : "+msg_list)
-    return "Added : "+msg_list
+    logger.info(f"{now}{author} Added: {msg_list}")
+    return f"Added: {msg_list}"
 
 
 def delete_game(author:str, message:str) -> str:
-    msg_list = str(message)[5:]
+    msg_list = message
     if msg_list == "":
         return "Enter a valid name"
     try:
-        with open("games.json", "r+") as file:
+        with FILENAME.open("r+") as file:
             data = json.load(file)
+            if msg_list not in data:
+                raise ValueError
             data.remove(msg_list)
             file.seek(0)
-            with open("games.json", "w") as file2:
-                data2 = []
-                json.dump(data2, file2, sort_keys=True, indent=4)
             json.dump(data, file, sort_keys=True, indent=4)
-    except Exception as e:
-        print(e)
-        return "There is no game called "+msg_list
+    except ValueError:
+        return f"There is no game called {msg_list}"
     else:
-        print(now+author+"Deleted : "+msg_list)
-        return "Deleted : "+msg_list
+        logger.info(f"{now}{author} Deleted: {msg_list}")
+        return f"Deleted: {msg_list}"
 
 
 def reset_games(author:str) -> str:
-    with open("games.json", "w") as file:
+    with FILENAME.open("w") as file:
         data = []
         json.dump(data, file, sort_keys=True, indent=4)
-    print(now+author+"Resetted all games")
+    logger.info(f"{now}{author} Resetted all games")
     return "Resetted games"
 
 
 def list_games(author:str) -> str:
-    if refresh_games() == []: return "There is no game to choose from"
-    print(now+author+"Listed all the games")
-    z = ''
-    for idx, val in enumerate(refresh_games()): z += (f'[{idx}] {val}\n')
-    return z
+    games = get_games()
+    if not games:
+        return "There is no game to choose from"
+    
+    games_list = '\n'.join([f"[{idx}] {val}" for idx, val in enumerate(games)])
+    logger.info(f"{now,author} Listed all the games")
+    return games_list
 
 
 # CHANNELS
@@ -80,7 +91,7 @@ async def clean(author:str, m:discord.message, client:discord.client) -> str:
             try:
                 await m.channel.delete_messages(temp)
             except Exception as e:
-                print(e)
+                logging.error(e)
                 break
 
     # if there is still message, bruteforce
@@ -89,19 +100,19 @@ async def clean(author:str, m:discord.message, client:discord.client) -> str:
             try:
                 await msg.delete()
             except Exception as e:
-                print(e)
+                logging.error(e)
                 continue
 
-    print(now+author+"Deleted all chat record for and by bot")
+    logging.info(now+author+"Deleted all chat record for and by bot")
     return ("Delete successful")
 
 
 # MISC
-def status(author:str) -> str:
-    uptime = str(boottime())
-    LoadCPU = str(psutil.cpu_percent())
-    VMEM = str(psutil.virtual_memory()[2])
-    print(now+author+"Asked for status")
+async def status(author:str) -> str:
+    uptime = psutil.boot_time()
+    LoadCPU = psutil.cpu_percent()
+    VMEM = psutil.virtual_memory()[2]
+    logger.info(now+author+"Asked for status")
     return(
         "Up since : "+uptime
         + "\nCPU Load : "+LoadCPU
