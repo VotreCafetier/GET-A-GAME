@@ -65,6 +65,6 @@ async def status(ctx):
     await ctx.send(status(ctx.author))
 
 try:
-    bot.run(secrets.discord_token)
+    bot.run(secrets.DISCORDTOKEN)
 except Exception as e:
     logging.error(e)
