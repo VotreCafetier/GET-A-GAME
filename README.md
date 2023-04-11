@@ -9,6 +9,8 @@
 
 === TODO ===
 - If instance of app already running, dont start
+- Fix getagame
+- Add docker image
 - If , then delete or add multiple
 - Add "" to insert string
 - Random but not already picked one
